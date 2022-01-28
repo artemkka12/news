@@ -1,0 +1,15 @@
+{% extends 'news/base.html' %}
+{% block title %}Изменение новости{% endblock %}
+{% block sidebar %}
+    {% include 'includes/_sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+    <h1>Изменение новости</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ form.non_field_errors }}
+        <button type="submit" class="btn btn-primary btn-block">Сохранить изменения</button>
+    </form>
+{% endblock %}

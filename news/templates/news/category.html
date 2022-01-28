@@ -1,0 +1,42 @@
+{% extends 'news/base.html' %}
+{% block title %}{{ category.title }}{% endblock %}
+{% block sidebar %}
+    <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+            Категории
+        </a>
+        {% for category in categories %}
+            <a href="{% url 'category' category.pk %}"
+               class="list-group-item list-group-item-action">{{ category.title }}</a>
+        {% endfor %}
+        <br>
+    </div>
+
+{% endblock %}
+
+{% block content %}
+    {% for item in news %}
+        <div class="card mb-3 ">
+            <div class="card-header">
+                {{ item.category }}
+            </div>
+            <div class="card-body">
+                <div class="media">
+                    {% if item.photo %}
+                        <img src="{{ item.photo.url }}" alt="" width="350" class="mr-3">
+                    {% endif %}
+                    <div class="media-body">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                        <p class="card-text">{{ item.content|safe|linebreaks|truncatewords:100 }}</p>
+                        <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Read more</a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-footer text-muted">
+                {{ item.created_at|date:"Y-m-d H:i" }}
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}
