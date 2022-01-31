@@ -90,8 +90,8 @@ class ViewNews(DetailView):
         ip = get_client_ip(request=self.request)
         if ip not in obj.users_ip:
             obj.views += 1
-            obj.save()
             obj.users_ip.append(ip)
+            obj.save()
         return obj
 
 
