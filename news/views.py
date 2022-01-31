@@ -83,15 +83,15 @@ class NewsByCategory(ListView):
 
 class ViewNews(DetailView):
     model = News
+    users_ip = []
 
     def get_object(self, queryset=None):
         obj = get_object_or_404(News, pk=self.kwargs.get('pk'))
-        users_ip = []
         ip = get_client_ip(request=self.request)
-        if ip not in users_ip:
+        if ip not in self.users_ip:
             obj.views += 1
             obj.save()
-        users_ip.append(ip)
+        self.users_ip.append(ip)
         return obj
 
 
