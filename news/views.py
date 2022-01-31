@@ -91,7 +91,7 @@ class ViewNews(DetailView):
         if ip not in self.users_ip:
             obj.views += 1
             obj.save()
-        self.users_ip.append(ip)
+            self.users_ip.append(ip)
         return obj
 
 
