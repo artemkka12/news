@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -74,6 +74,12 @@ class NewsByCategory(ListView):
 
 class ViewNews(DetailView):
     model = News
+
+    def get_object(self, queryset=None):
+        obj = get_object_or_404(News, pk=self.kwargs.get('pk'))
+        obj.views += 1
+        obj.save()
+        return obj
 
 
 class CreateNews(LoginRequiredMixin, CreateView):
