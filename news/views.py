@@ -87,10 +87,8 @@ class ViewNews(DetailView):
     def get_object(self, queryset=None):
         obj = get_object_or_404(News, pk=self.kwargs.get('pk'))
         ip = get_client_ip(request=self.request)
-        if ip not in obj.users_ip:
-            obj.views += 1
-            obj.users_ip += ip
-            obj.save()
+        obj.views += 1
+        obj.save()
         return obj
 
 
