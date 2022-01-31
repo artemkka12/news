@@ -9,6 +9,15 @@ from .forms import NewsForm, UserRegisterForm, UserLoginForm
 from .models import News, Category
 
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -74,11 +83,15 @@ class NewsByCategory(ListView):
 
 class ViewNews(DetailView):
     model = News
+    users_ip = []
 
     def get_object(self, queryset=None):
         obj = get_object_or_404(News, pk=self.kwargs.get('pk'))
-        obj.views += 1
-        obj.save()
+        ip = get_client_ip(request=self.request)
+        if ip not in self.users_ip:
+            obj.views += 1
+            obj.save()
+        self.users_ip.append(ip)
         return obj
 
 
