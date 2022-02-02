@@ -22,8 +22,10 @@
         </div>
         <div class="card-footer text-muted">
             {{ news.created_at|date:"Y-m-d H:i" }}<br>Просмотров: {{ news.views }}
-            <br><a href="{% url 'update-news' news.pk %}">Update</a>
-            <br><a href="{% url 'delete-news' news.pk %}">Delete</a>
+            {% if request.user == news.author %}
+                <br><a href="{% url 'update-news' news.pk %}" class="btn btn-primary">Update</a>
+                    <a href="{% url 'delete-news' news.pk %}" class="btn btn-primary">Delete</a>
+            {% endif %}
         </div>
     </div>
 

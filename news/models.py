@@ -1,5 +1,5 @@
+from django.contrib.auth.models import User
 from django.db import models
-
 from django.urls import reverse
 
 
@@ -12,6 +12,7 @@ class News(models.Model):
     is_published = models.BooleanField(default=False, verbose_name='Опубликовано')
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категория')
     views = models.IntegerField(default=0)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def get_absolute_url(self):
         return reverse('view-news', kwargs={"pk": self.pk})

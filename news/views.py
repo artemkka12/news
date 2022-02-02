@@ -9,15 +9,6 @@ from .forms import NewsForm, UserRegisterForm, UserLoginForm
 from .models import News, Category
 
 
-def get_client_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
-
-
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -86,8 +77,8 @@ class ViewNews(DetailView):
 
     def get_object(self, queryset=None):
         obj = get_object_or_404(News, pk=self.kwargs.get('pk'))
-        ip = get_client_ip(request=self.request)
-        obj.views += 1
+        if self.request.user.is_authenticated:
+            obj.views += 1
         obj.save()
         return obj
 
@@ -98,14 +89,33 @@ class CreateNews(LoginRequiredMixin, CreateView):
     template_name = 'news/add_news.html'
     success_url = reverse_lazy('index')
 
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.save()
+        return super().form_valid(form)
 
-class UpdateNews(UpdateView):
+
+class UpdateNews(LoginRequiredMixin, UpdateView):
     model = News
     form_class = NewsForm
     template_name = 'news/news_update_form.html'
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if self.object.author != self.request.user:
+            return self.handle_no_permission()
+        return kwargs
 
-class DeleteNews(DeleteView):
+
+class DeleteNews(LoginRequiredMixin, DeleteView):
     model = News
     template_name = 'news/news_delete.html'
     success_url = reverse_lazy('index')
+    permission_required = 'news.delete_news'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if self.object.author != self.request.user:
+            return self.handle_no_permission()
+        return kwargs
