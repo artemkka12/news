@@ -25,10 +25,11 @@ class UserRegisterForm(UserCreationForm):
 class NewsForm(forms.ModelForm):
     class Meta:
         model = News
-        fields = ['title', 'content', 'is_published', 'category', ]
+        fields = ['title', 'content', 'photo', 'is_published', 'category', ]
 
         widgets = {
             'title': TextInput(attrs={'class': 'form-control'}),
             'content': Textarea(attrs={'class': 'form-control', 'rows': 5}),
             'category': Select(attrs={'class': 'form-control'}),
+
         }

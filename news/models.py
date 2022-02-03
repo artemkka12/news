@@ -8,11 +8,12 @@ class News(models.Model):
     content = models.TextField(blank=True, verbose_name='Содержание')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата редактирования')
-    photo = models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name='Фото', blank=True)
+    photo = models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name='Фото', blank=True, null=True)
     is_published = models.BooleanField(default=False, verbose_name='Опубликовано')
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категория')
     views = models.IntegerField(default=0)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='news')
+    members = models.ManyToManyField(User, related_name='members', blank=True)
 
     def get_absolute_url(self):
         return reverse('view-news', kwargs={"pk": self.pk})

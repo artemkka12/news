@@ -77,8 +77,10 @@ class ViewNews(DetailView):
 
     def get_object(self, queryset=None):
         obj = get_object_or_404(News, pk=self.kwargs.get('pk'))
+
         if self.request.user.is_authenticated:
-            obj.views += 1
+            obj.members.add(self.request.user)
+            obj.views = obj.members.count()
         obj.save()
         return obj
 
@@ -88,11 +90,12 @@ class CreateNews(LoginRequiredMixin, CreateView):
     form_class = NewsForm
     template_name = 'news/add_news.html'
     success_url = reverse_lazy('index')
+    obj = None
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.author = self.request.user
-        self.object.save()
+        self.obj = form.save(commit=False)
+        self.obj.author = self.request.user
+        self.obj.save()
         return super().form_valid(form)
 
 
