@@ -44,7 +44,7 @@ class HomeNews(ListView):
     model = News
     template_name = 'news/home_news_list.html'
     context_object_name = 'news'
-    paginate_by = 4
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -60,7 +60,7 @@ class NewsByCategory(ListView):
     template_name = 'news/category_news_list.html'
     context_object_name = 'news'
     allow_empty = False
-    paginate_by = 4
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -94,7 +94,6 @@ class CreateNews(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         self.obj = form.save(commit=False)
-        # self.obj = NewsForm(self.request.POST, self.request.FILES)
         self.obj.author = self.request.user
         self.obj.save()
         return super().form_valid(form)
