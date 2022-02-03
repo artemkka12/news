@@ -6,7 +6,7 @@
 
 {% block content %}
     <h1>Добавление новости</h1>
-    <form action="{% url 'add-news' %}" method="post">
+    <form action="{% url 'add-news' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         {{ form.non_field_errors }}

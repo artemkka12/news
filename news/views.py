@@ -94,6 +94,7 @@ class CreateNews(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         self.obj = form.save(commit=False)
+        # self.obj = NewsForm(self.request.POST, self.request.FILES)
         self.obj.author = self.request.user
         self.obj.save()
         return super().form_valid(form)
