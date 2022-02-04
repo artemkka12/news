@@ -15,5 +15,6 @@ urlpatterns = [
     path('news/delete-news/<int:pk>', views.DeleteNews.as_view(), name='delete-news'),
 ]
 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
