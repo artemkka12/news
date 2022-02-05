@@ -8,7 +8,7 @@ class News(models.Model):
     content = models.TextField(blank=True, verbose_name='Content')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Date of creation')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Date edited')
-    photo = models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name='Фото', blank=True, null=True)
+    photo = models.ImageField(upload_to='photos/%Y/%m/%d/', verbose_name='Photo', blank=True, null=True)
     is_published = models.BooleanField(default=False, verbose_name='Publish')
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Category')
     views = models.IntegerField(default=0)
