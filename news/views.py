@@ -47,6 +47,9 @@ class HomeNews(ListView):
     context_object_name = 'news'
     paginate_by = 10
 
+    def get_queryset(self):
+        return News.objects.filter(is_published=True)
+
 
 class Categories(ListView):
     model = Category
@@ -74,11 +77,8 @@ class NewsByCategory(HomeNews):
         return News.objects.filter(category_id=self.kwargs["category_id"], is_published=True)
 
 
-class NewsByAuthor(ListView):
-    model = News
+class NewsByAuthor(HomeNews):
     template_name = 'news/news_by_author.html'
-    context_object_name = 'news'
-    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -91,8 +91,6 @@ class NewsByAuthor(ListView):
 
 
 class ViewNews(DetailView):
-    model = News
-
     def get_object(self, queryset=None):
         obj = get_object_or_404(News, pk=self.kwargs.get('pk'))
 
@@ -100,6 +98,7 @@ class ViewNews(DetailView):
             obj.members.add(self.request.user)
             obj.views = obj.members.count()
         obj.save()
+
         return obj
 
 
