@@ -1,19 +1,10 @@
 {% extends 'news/base.html' %}
-{% block title %}Изменение новости{% endblock %}
-{% block sidebar %}
-    {% include 'includes/_sidebar.html' %}
-{% endblock %}
+{% block title %}Delete news{% endblock %}
+
 
 {% block content %}
-    <h1>Удаление новости</h1>
-{#    <form method="post">#}
-{#        {% csrf_token %}#}
-{#        {{ form.as_p }}#}
-{#        {{ form.non_field_errors }}#}
-{#        <button type="submit" class="btn btn-primary btn-block">Сохранить изменения</button>#}
-{#    </form>#}
     <form method="post">{% csrf_token %}
-        <p>Are you sure you want to delete "{{ object }}"?</p>
+        <p>Are you sure you want to delete this news?</p>
         <input type="submit" value="Yes">
     </form>
 {% endblock %}

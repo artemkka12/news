@@ -1,12 +1,12 @@
 {% extends 'news/base.html' %}
-{% block title %}Авторизация{% endblock %}
+{% block title %}Authorization{% endblock %}
 
 {% block content %}
-    <h1>Авторизация</h1>
+    <h1>Authorization</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary btn-block">Авторизация</button>
+        <button type="submit" class="btn btn-primary btn-block">Authorization</button>
 
     </form>
 {% endblock %}

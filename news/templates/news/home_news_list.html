@@ -1,21 +1,18 @@
 {% extends 'news/base.html' %}
 {% load news_tags %}
 {% load static %}
-{% block title %}{{ title }}{% endblock %}
+{% block title %}News{% endblock %}
 {% block sidebar %}
-    {% include 'includes/_sidebar.html' %}
-    <div class="list-group">
-    <div class="list-group-item list-group-item-action active">Топ 3 новости</div>
+    <div class="list-group-item list-group-item-action active">Top 3 news</div>
 
     {% get_list_popular_news as news %}
-    {% for item in news%}
-            <a href="{{ item.get_absolute_url }}" class="list-group-item list-group-item-action">{{ item.title }}</a>
+    {% for item in news %}
+        <a href="{{ item.get_absolute_url }}" class="list-group-item list-group-item-action">{{ item.title }}</a>
     {% endfor %}
     <br>
-
-</div>
 {% endblock %}
 {% block content %}
+    {% get_list_news as news %}
     {% for item in news %}
         <div class="card mb-3 ">
             <div class="card-header">
@@ -35,7 +32,7 @@
 
             </div>
             <div class="card-footer text-muted">
-                {{ item.created_at|date:"Y-m-d H:i" }}<br>Просмотров: {{ item.views }}<br>by {{ item.author }}
+                {{ item.created_at|date:"Y-m-d H:i" }}<br>Views: {{ item.views }}<br>By {{ item.author }}
             </div>
         </div>
     {% endfor %}

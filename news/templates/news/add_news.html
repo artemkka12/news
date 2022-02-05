@@ -1,16 +1,13 @@
 {% extends 'news/base.html' %}
-{% block title %}Добавление новости{% endblock %}
-{% block sidebar %}
-    {% include 'includes/_sidebar.html' %}
-{% endblock %}
+{% block title %}Add news{% endblock %}
 
 {% block content %}
-    <h1>Добавление новости</h1>
+    <h1>Add news</h1>
     <form action="{% url 'add-news' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         {{ form.non_field_errors }}
-        <button type="submit" class="btn btn-primary btn-block">Добавить новость</button>
+        <button type="submit" class="btn btn-primary btn-block">Add news</button>
 
     </form>
 {% endblock %}

@@ -2,7 +2,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -10,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-    <title>{% block title %}Page{% endblock %}</title>
+    <title>{% block title %}News{% endblock %}</title>
 </head>
 <body>
 {% include 'includes/_navbar.html' %}
@@ -33,7 +32,7 @@
 
 
 
-            {% block content %}CONTENT{% endblock %}
+            {% block content %}{% endblock %}
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
                     {% for p in page_obj.paginator.page_range %}

@@ -1,24 +1,22 @@
 {% extends 'news/base.html' %}
-{% block title %}{{ category.title }}{% endblock %}
+{% load news_tags %}
+{% block title %}{{ request.user.username }}{% endblock %}
 {% block sidebar %}
     <div class="list-group">
-        <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-            Категории
-        </a>
-        {% for category in categories %}
-            <a href="{% url 'category' category.pk %}"
-               class="list-group-item list-group-item-action">{{ category.title }}</a>
-        {% endfor %}
+        <div class="list-group">
+            <div class="list-group-item list-group-item-action active">The most popular news by {{ request.user.username }}</div>
+
+            <a href="{{ popular_news.get_absolute_url }}"
+               class="list-group-item list-group-item-action">{{ popular_news }}</a>
+        </div>
         <br>
     </div>
-
 {% endblock %}
-
 {% block content %}
     {% for item in news %}
         <div class="card mb-3 ">
             <div class="card-header">
-                {{ item.category }}
+                <a href="{{ item.category.get_absolute_url }}">{{ item.category }}</a>
             </div>
             <div class="card-body">
                 <div class="media">
@@ -34,9 +32,11 @@
 
             </div>
             <div class="card-footer text-muted">
-                {{ item.created_at|date:"Y-m-d H:i" }}
+                {{ item.created_at|date:"Y-m-d H:i" }}<br>Views: {{ item.views }}<br>By {{ item.author }}
             </div>
         </div>
     {% endfor %}
 
 {% endblock %}
+
+

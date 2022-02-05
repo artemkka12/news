@@ -2,17 +2,9 @@
 {% load news_tags %}
 {% block title %}{{ title }}{% endblock %}
 {% block sidebar %}
-    {% include 'includes/_sidebar.html' %}
     <div class="list-group">
-        <div class="list-group-item list-group-item-action active">Топ 3 новости</div>
-
-        {% get_list_popular_news as news %}
-        {% for item in news %}
-            <a href="{{ item.get_absolute_url }}" class="list-group-item list-group-item-action">{{ item.title }}</a>
-        {% endfor %}
-        <br>
         <div class="list-group">
-            <div class="list-group-item list-group-item-action active">Самая популярная новость из категории "{{ title }}"</div>
+            <div class="list-group-item list-group-item-action active">The most popular news from "{{ title }}"</div>
 
             <a href="{{ popular_news.get_absolute_url }}"
                class="list-group-item list-group-item-action">{{ popular_news }}</a>
@@ -40,7 +32,7 @@
 
             </div>
             <div class="card-footer text-muted">
-                {{ item.created_at|date:"Y-m-d H:i" }}<br>Просмотров: {{ item.views }}
+                {{ item.created_at|date:"Y-m-d H:i" }}<br>Views: {{ item.views }}<br>By {{ item.author }}
             </div>
         </div>
     {% endfor %}

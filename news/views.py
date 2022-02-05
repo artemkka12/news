@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
+from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -15,10 +16,10 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, 'Регистрация прошла успешно!')
+            messages.success(request, 'Registration completed successfully!')
             return redirect('index')
         else:
-            messages.error(request, 'Ошибка регистрации!')
+            messages.error(request, 'Registration error!')
     form = UserRegisterForm()
     return render(request, 'news/register.html', {'form': form})
 
@@ -46,21 +47,22 @@ class HomeNews(ListView):
     context_object_name = 'news'
     paginate_by = 10
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Главная страница'
-        return context
 
-    def get_queryset(self):
-        return News.objects.filter(is_published=True)
+class Categories(ListView):
+    model = Category
+    template_name = 'news/list_categories.html'
+    context_object_name = 'categories'
 
 
-class NewsByCategory(ListView):
-    model = News
+class Authors(ListView):
+    model = User
+    template_name = 'news/list_authors.html'
+    context_object_name = 'authors'
+
+
+class NewsByCategory(HomeNews):
     template_name = 'news/category_news_list.html'
-    context_object_name = 'news'
     allow_empty = False
-    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -70,6 +72,22 @@ class NewsByCategory(ListView):
 
     def get_queryset(self):
         return News.objects.filter(category_id=self.kwargs["category_id"], is_published=True)
+
+
+class NewsByAuthor(ListView):
+    model = News
+    template_name = 'news/news_by_author.html'
+    context_object_name = 'news'
+    paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['popular_news'] = News.objects.filter(author_id=self.kwargs["author_id"], is_published=True).order_by(
+            '-views').first()
+        return context
+
+    def get_queryset(self):
+        return News.objects.filter(author_id=self.kwargs["author_id"], is_published=True)
 
 
 class ViewNews(DetailView):
@@ -115,7 +133,6 @@ class DeleteNews(LoginRequiredMixin, DeleteView):
     model = News
     template_name = 'news/news_delete.html'
     success_url = reverse_lazy('index')
-    permission_required = 'news.delete_news'
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

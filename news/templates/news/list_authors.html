@@ -1,0 +1,22 @@
+{% extends 'news/base.html' %}
+{% load news_tags %}
+{% load static %}
+{% block title %}Authors{% endblock %}
+{% block sidebar %}
+    {% load news_tags %}
+    <div class="list-group">
+        <div class="list-group-item list-group-item-action active">Authors</div>
+
+        {% get_list_authors as authors %}
+        {% for author in authors %}
+            <a href="{% url 'author' author.pk%}"
+               class="list-group-item list-group-item-action">{{ author.username }}: {{ author.cnt }}</a>
+        {% endfor %}
+        <br>
+    </div>
+
+
+    <div class="list-group">
+
+    </div>
+{% endblock %}
