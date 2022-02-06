@@ -6,8 +6,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from .forms import NewsForm, UserRegisterForm, UserLoginForm
-from .models import News, Category
+from .forms import NewsForm, UserRegisterForm, UserLoginForm, CommentForm
+from .models import News, Category, Comment
 
 
 def register(request):
@@ -90,7 +90,12 @@ class NewsByAuthor(HomeNews):
         return News.objects.filter(author_id=self.kwargs["author_id"], is_published=True)
 
 
-class ViewNews(DetailView):
+class ViewNews(DetailView, CreateView):
+    form_class = CommentForm
+    template_name = 'news/news_detail.html'
+    success_url = reverse_lazy('index')
+    comment_obj = None
+
     def get_object(self, queryset=None):
         obj = get_object_or_404(News, pk=self.kwargs.get('pk'))
 
@@ -100,6 +105,18 @@ class ViewNews(DetailView):
         obj.save()
 
         return obj
+
+    def form_valid(self, form):
+        self.comment_obj = form.save(commit=False)
+        self.comment_obj.author = self.request.user
+        self.comment_obj.news = get_object_or_404(News, pk=self.kwargs.get('pk'))
+        self.comment_obj.save()
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = Comment.objects.filter(news_id=self.kwargs.get('pk')).order_by('-created_at')
+        return context
 
 
 class CreateNews(LoginRequiredMixin, CreateView):

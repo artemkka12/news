@@ -1,4 +1,5 @@
 {% extends 'news/base.html' %}
+{% load static %}
 {% block title %}{{ news.title }}{% endblock %}
 {% block content %}
     <div class="card mb-3 ">
@@ -21,11 +22,53 @@
             {{ news.created_at|date:"Y-m-d H:i" }}<br>Views: {{ news.views }}<br>By {{ news.author }}
             {% if request.user == news.author %}
                 <br><a href="{% url 'update-news' news.pk %}" class="btn btn-primary">Update</a>
-                    <a href="{% url 'delete-news' news.pk %}" class="btn btn-primary">Delete</a>
+                <a href="{% url 'delete-news' news.pk %}" class="btn btn-primary">Delete</a>
             {% endif %}
         </div>
     </div>
+    <link rel="stylesheet" href="{% static 'css/comment.css' %}">
+    <div class="container">
+        <div class="row bootstrap snippets bootdeys">
+            <div class="col-md-8 col-sm-12">
+                <div class="comment-wrapper">
+                    <div class="panel panel-info">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            {{ form.non_field_errors }}
+                            <button type="submit" class="btn btn-primary btn-block">Post</button>
+                        </form>
+                        <hr>
 
+                        <div class="panel-heading">
+                        </div>
+                        <div class="panel-body">
+                            <ul class="media-list">
+                                {% for comment in comments %}
+                                    <li class="media">
+                                        <a href="#" class="pull-left">
+                                            <img src="https://bootdey.com/img/Content/user_1.jpg" alt=""
+                                                 class="img-circle">
+                                        </a>
+                                        <div class="media-body">
+                                <span class="text-muted pull-right">
+                                    <small class="text-muted">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+                                </span>
+                                            <strong class="text-success">{{ comment.author.username }}</strong>
+                                            <p>
+                                                {{ comment.comment }}
+                                            </p>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 

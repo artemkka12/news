@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import News, Category
+from .models import News, Category, Comment
 
 
 class NewsAdmin(admin.ModelAdmin):
@@ -39,5 +39,23 @@ class CategoryAdmin(admin.ModelAdmin):
                      ]
 
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['id',
+                    'comment',
+                    'author',
+                    'news',
+                    'created_at',
+                    ]
+
+    list_display_links = ['comment',
+                          ]
+
+    search_fields = ['comment',
+                     'news',
+                     'author',
+                     ]
+
+
 admin.site.register(News, NewsAdmin)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Comment, CommentAdmin)

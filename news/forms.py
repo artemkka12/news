@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.forms import TextInput, Textarea, Select, EmailInput, PasswordInput
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
-from .models import News
+from .models import News, Comment
 
 
 class UserLoginForm(AuthenticationForm):
@@ -31,5 +31,11 @@ class NewsForm(forms.ModelForm):
             'title': TextInput(attrs={'class': 'form-control'}),
             'content': Textarea(attrs={'class': 'form-control', 'rows': 5}),
             'category': Select(attrs={'class': 'form-control'}),
-
         }
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment', ]
+        widgets = {'comment': Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'write a comment...'})}
