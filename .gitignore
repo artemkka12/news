@@ -6,12 +6,6 @@ __pycache__/
 # C extensions
 *.so
 
-
-news/staticfiles
-news/static
-staticfiles/
-media/
-mysite/static
 # Distribution / packaging
 .Python
 build/
