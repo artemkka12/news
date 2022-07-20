@@ -81,12 +81,6 @@ DATABASES = {
         'PORT': 5432,
         'USER': 'werdcrainbzion',
         'PASSWORD': '1f5617ccddf3b6efd4e461166630a021d5306cafd4708248bda88bf75c99ced7',
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        # 'NAME': 'postgres',
-        # 'USER': 'postgres',
-        # 'PASSWORD': 'herokupostgre',
-        # 'HOST': 'localhost',
-        # 'PORT': '5432',
     }
 }
 
